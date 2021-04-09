@@ -1,17 +1,16 @@
-from generator import generator
+from lib.generator import generator
+from time import perf_counter
 import math
 
 
 def error(rank: list, last: list) -> float:
     """计算r_new与r_old差的模，即停止条件"""
-    mysum = 0.0
-    for i in range(len(rank)):
-        mysum += (rank[i] - last[i])**2
+    mysum = sum(list(map(lambda x: (x[0]-x[1])**2, zip(rank, last))))
     mysum = math.sqrt(mysum)
     return mysum
 
 
-def PageRank(N: int, step: int, beta=0.8, epsilon=0.01) -> list:
+def PageRank(N: int, step: int, beta=0.8, epsilon=10e-8) -> list:
     """PageRank算法
 
     Args:
@@ -25,24 +24,24 @@ def PageRank(N: int, step: int, beta=0.8, epsilon=0.01) -> list:
 
     """
     M = generator(N, step)
+    t = perf_counter()
     rank = [1/N for i in range(N)]
+    iterations = 0
     while True:
         rnew = [0 for i in range(N)]
         pointer = 0
         for m in M:  # 遍历每个分块
             for line in m:  # 查询该分块的每一行
-                for j in range(pointer, pointer + step):  # 查询该分块包含的节点是否包含在该行的dest字段
-                    if j in line[2]:
-                        rnew[j] += rank[line[0]]/line[1]  # 对r_new进行累加
+                for j in line[2]:  # 遍历每行dest字段包含的节点
+                    rnew[j] += rank[line[0]]/line[1]  # 对r_new进行累加
             pointer += step
         # r_new乘beta再加(1-beta)/N，防止spider trap
         rnew = list(map(lambda x: x*beta + (1 - beta)/N, rnew))
+        iterations += 1
         if error(rnew, rank) < epsilon:  # 判断收敛条件
             rank = rnew
             break
         rank = rnew  # 更新rank值
+    print(f"迭代完成，共迭代{iterations}次。")
+    print(f"PageRank算法用时：{perf_counter() - t}秒。")
     return rank
-
-
-if __name__ == "__main__":
-    myrank = PageRank(1000, 100, 0.8, 0.01)

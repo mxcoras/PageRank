@@ -1,4 +1,6 @@
 import random
+import sys
+from time import perf_counter
 
 
 def generator(N: int, step: int) -> list:
@@ -9,9 +11,11 @@ def generator(N: int, step: int) -> list:
         step: 每个分块的大小，必须分为至少两块
 
     Returns:
-        分块的迁移矩阵，返回类型为list。
+        分块的迁移矩阵，返回类型为list
+        格式为[[(src, degree, [dest, ...]), ...], ...]
     
     """
+    t = perf_counter()
     matrix_num = [i for i in range(N)]  # 用于加速列表推导式
     degree = [random.randint(6, 15) for i in range(N)]
     matrix = [(i, degree[i], sorted(random.sample(matrix_num, degree[i])))
@@ -42,4 +46,7 @@ def generator(N: int, step: int) -> list:
                 else:
                     left = i
                     old_seq = new_seq
+    print(f"矩阵生成用时：{perf_counter() - t}秒。")
+    print(f"原始稀疏矩阵占用内存：{sys.getsizeof(matrix)/1024}KB")
+    print(f"三元组分块表示的稀疏矩阵占用内存：{sys.getsizeof(part)/1024}KB")
     return part
