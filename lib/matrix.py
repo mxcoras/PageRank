@@ -1,13 +1,26 @@
 class Matrix:
+    """封装了矩阵乘法，包括矩阵乘矩阵，数乘矩阵
+    使用示例：
+
+    >>> A = Matrix(4, 3)
+    >>> B = Matrix(3, 2)
+    >>> A1 = [[5, 2, 4], [3, 8, 2], [6, 0, 4], [0, 1, 6]]
+    >>> B1 = [[2, 4], [1, 3], [3, 2]]
+    >>> A.value(A1)
+    >>> B.value(B1)
+    >>> C = A*B
+    >>> C.print()
+    >>> D = 2*A
+    >>> D.print()
+
     """
-    封装了矩阵乘法，包括矩阵乘矩阵，数乘矩阵
-    """
+
     def __init__(self, row, col) -> None:
         self.row = row
         self.col = col
         self.A = [[0 for i in range(col)] for j in range(row)]
 
-    def value(self, value:list):
+    def value(self, value: list):
         if len(value) == self.row and len(value[0]) == self.col:
             self.A = value
 
@@ -37,18 +50,3 @@ class Matrix:
 
     def print(self):
         print(self.A)
-
-"""
-使用示例
-
-A = Matrix(4, 3)
-B = Matrix(3, 2)
-A1 = [[5, 2, 4], [3, 8, 2], [6, 0, 4], [0, 1, 6]]
-B1 = [[2, 4], [1, 3], [3, 2]]
-A.value(A1)
-B.value(B1)
-C = A*B
-C.print()
-D = 2*A
-D.print()
-"""
