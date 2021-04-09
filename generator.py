@@ -8,11 +8,38 @@ def generator(N: int) -> list:
     """
     matrix_num = [i for i in range(N)] # 用于加速列表推导式
     XofC = [random.randint(6, 15) for i in range(N)]
-    matrix = [(i, XofC[i], random.sample(matrix_num, XofC[i]))
+    matrix = [(i, XofC[i], sorted(random.sample(matrix_num, XofC[i])))
               for i in range(N)]
     # TODO
     # 将matrix分块，以一个列表的形式返回
     # return [M1, M2, M3, ...]
+
+    #格式：
+    #编号 + 初度 +列表（指向的编号）
+    #假定是100个块(par_siz)
+
+    par_siz = 100
+    par_num = N // par_siz
+
+    par = [[] for i in range(par_num)]
+
+    #若有序
+    for m in matrix:
+        left = 0
+        old_seq = int(m[2][0] / par_siz)
+        for i in range(len(m[2])):
+            new_seq = int(m[2][i] / par_siz)
+            if old_seq != new_seq:
+                new_m = (m[0], m[1], m[2][left:i])
+                par[old_seq].append(new_m)
+                if new_seq == par_num -1:
+                    new_m = (m[0], m[1], m[2][i:])
+                    par[new_seq].append(new_m)
+                    break
+                else:
+                    left = i
+                    old_seq = new_seq
+    return par
 
 
 """
