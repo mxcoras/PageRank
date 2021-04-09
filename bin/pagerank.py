@@ -1,5 +1,6 @@
 from lib.generator import generator
 from time import perf_counter
+import sqlite3
 import math
 
 
@@ -23,16 +24,22 @@ def PageRank(N: int, step: int, beta=0.8, epsilon=10e-8) -> list:
         迭代到收敛标准时的PageRank值，返回类型为list。
 
     """
-    M = generator(N, step)
+    # M = generator(N, step)
+    generator(N, step)
     t = perf_counter()
+    conn = sqlite3.connect("generator.db")
+    c = conn.cursor()
     rank = [1/N for i in range(N)]
     iterations = 0
     while True:
         rnew = [0 for i in range(N)]
         pointer = 0
-        for m in M:  # 遍历每个分块
+        # for m in M:  # 遍历每个分块
+        for i in range(N//step):
+            m = c.execute(f"select src, degree, dest from part \
+                        where part_num = {i}").fetchall()
             for line in m:  # 查询该分块的每一行
-                for j in line[2]:  # 遍历每行dest字段包含的节点
+                for j in eval(line[2]):  # 遍历每行dest字段包含的节点
                     rnew[j] += rank[line[0]]/line[1]  # 对r_new进行累加
             pointer += step
         # r_new乘beta再加(1-beta)/N，防止spider trap
