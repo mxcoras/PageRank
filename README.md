@@ -34,7 +34,7 @@ generator.py是生成迁移矩阵并将其表示成三元组的形式，具体�
 ```
 这个部分是将之前生成的伴随矩阵转化成格式为[[(src, degree, [dest, ...]), ...], ...]的三元组，以节省内存空间。在文件的最后有伴随矩阵及其三元组的大小的对比。
 接下来就是使用pagerank算法计算rank vector
-这个迭代的过程在满足|r(t+1) – r(t)|<sub>1</sub><e，其中e为我们设置的收敛标准epsilon，这里的一范数即为求两个vector的差的模，具体判断函数为：
+这个迭代的过程在满足|r(t+1) – r(t)|<sub>2</sub><e，其中e为我们设置的收敛标准epsilon，这里的二范数即为求两个vector的差的模，具体判断函数为：
 ```
 def error(rank: list, last: list) -> float:
     """计算r_new与r_old差的模，即停止条件"""
