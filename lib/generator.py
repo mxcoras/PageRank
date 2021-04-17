@@ -20,14 +20,6 @@ def generator(N: int, step: int) -> list:
     degree = [random.randint(6, 15) for i in range(N)]
     matrix = [(i, degree[i], sorted(random.sample(matrix_num, degree[i])))
               for i in range(N)]
-    """
-    没有节点指向自己的情况：
-    matrix = []
-    for i in range(N):
-        matrix_num.remove(i)
-        matrix.append((i, degree[i], sorted(random.sample(matrix_num, degree[i]))))
-        matrix_num.append(i) 
-    """
     part_size = step
     part_num = N // part_size
     part = [[] for i in range(part_num)]

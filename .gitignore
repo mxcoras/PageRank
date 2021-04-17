@@ -1,2 +1,6 @@
 .vscode/
 __pycache__/
+test.py
+db/
+db2/
+*.db
