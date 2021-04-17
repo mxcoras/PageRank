@@ -39,7 +39,7 @@ def PageRank(N: int, step: int, beta=0.8, epsilon=10e-8) -> list:
             m = c.execute(f"select src, degree, dest from part \
                         where part_num = {i}").fetchall()
             for line in m:  # 查询该分块的每一行
-                for j in eval(line[2]):  # 遍历每行dest字段包含的节点
+                for j in list(map(lambda x: int(x), line[2][1:-1].split(', '))):  # 遍历每行dest字段包含的节点
                     rnew[j] += rank[line[0]]/line[1]  # 对r_new进行累加
             pointer += step
         # r_new乘beta再加(1-beta)/N，防止spider trap
