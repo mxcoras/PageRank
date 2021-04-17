@@ -15,11 +15,10 @@ def generator(L: int, R: int, N: int, part_size: int):
     Returns:
         分块的迁移矩阵，返回类型为list
         格式为[[(src, degree, [dest, ...]), ...], ...]
-    
+
     """
     table = L // part_size
     t = perf_counter()
-    # conn = mysql.connector.connect(user='root', password='123456', database='generator')
     conn = sqlite3.connect(f"db/generator{table}.db")
     c = conn.cursor()
     c.execute(f"""create table part
@@ -29,15 +28,8 @@ def generator(L: int, R: int, N: int, part_size: int):
                 dest text not null,
                 primary key(part_num, src));""")
     conn.commit()
-    # matrix_num = [i for i in range(N)]  # 用于加速列表推导式
-    # degree = [random.randint(6, 15) for i in range(N)]
     part_num = N // part_size
-    # conn2 = sqlite3.connect(f"db/degree{table}.db")
-    # c2 = conn2.cursor()
     for k in range(L, R):
-        # if k % 1000000 == 0:
-        #     print(k)
-        # degree = c2.execute(f"select deg from degree where id = {k}").fetchone()[0]
         numbers = []
         degree = random.randint(6, 15)
         for i in range(degree):
@@ -62,6 +54,3 @@ def generator(L: int, R: int, N: int, part_size: int):
                     old_seq = new_seq
     conn.commit()
     conn.close()
-    # print(f"矩阵生成用时：{perf_counter() - t}秒。")
-    # print(f"原始稀疏矩阵占用内存：{sys.getsizeof(matrix)/1024}KB")
-    # print(f"三元组分块表示的稀疏矩阵占用内存：{sys.getsizeof(part)/1024}KB")
