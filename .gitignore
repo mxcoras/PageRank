@@ -1,4 +1,6 @@
 .vscode/
 __pycache__/
 test.py
-generator.db
+*.db
+db/
+db2/
