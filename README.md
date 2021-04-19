@@ -2,6 +2,8 @@
 
 PageRank算法的Python标准库实现
 
+sqlite3 版本见 sqlite 分支
+
 ## 目录说明
 
 ```shell
@@ -21,7 +23,7 @@ PageRank算法的Python标准库实现
 ## 运行环境
 
 - Linux / Windows
-- Python3.7+, sqlite3
+- Python3.7+
 
 ## 运行
 
